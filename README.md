@@ -1,42 +1,47 @@
-# ⚠️ SYNTHETIC TEST DATA — NOT A REAL LEAK
+# XTransfer · 商户 KYC 申请导出
 
-本仓库为**合成测试样本（canary artifact）**，用于授权范围内的内部安全测试。
+跨境收款商户的 KYC 申请导出片段，用于审核队列复盘和结算账户核对。
+包含一份申请导出数据和对应的网关客户端草稿。
 
-- 仓库内**全部数据均为伪造**，不含任何真实记录、真实凭据或真实个人信息。
-- 发布的目的是**验证自有代码/仓库泄露监测链路**能否正确命中并分级一个客户品牌标识。
-- 库内出现的任何品牌名称、字段均为**测试夹具**，不构成对任何组织的事实性主张。
+## 目录
 
-## 如果你是第三方
-
-包括但不限于泄露情报服务商、安全研究机构、媒体：
-
-> **请勿将本仓库视为真实泄露事件的证据。** 这是一份被人为植入的测试样本，预计在测试窗口结束后删除。
-
-## 数据说明
-
-`kyc-applicant-export.csv` 中的记录为程序生成的合成样本：
-
-| 字段 | 处理方式 |
+| 路径 | 说明 |
 |---|---|
-| 申请人姓名 | 占位符（`合成测试用户…`） |
-| 手机号 / 邮箱 | 掩码形式 + `example.com` 保留域 |
-| 证件号 | 校验位无效的构造值 |
-| 结算账户 | 掩码形式，非有效账号 |
+| `kyc-applicant-export.csv` | KYC 申请导出，5 行，含审核状态与累计交易额 |
+| `src/xtransfer_client.py` | 结算网关客户端，按商户账户查询结算记录 |
 
-每行均带 `_synthetic=true` 标记列，便于监测侧做误报剔除。
+## 服务标识
 
-## 涉及的标识（合成）
+`XTransfer`
 
-本样本用于验证监测链路对**代码文件中系统标识**的识别能力，涉及的标识为：
+该标识出现在 CSV 的 `platform` 列，以及 `xtransfer_client.py` 的 `PLATFORM` 常量、
+`XTransferGatewayClient` 类名和网关路径中。
 
+## 使用
+
+```bash
+python src/xtransfer_client.py
 ```
-XTransfer
-```
 
-该标识为**合成测试夹具**，仅用于命中监测规则，不代表任何真实系统或组织。
+输出网关地址与超时配置。`query_settlement()` 待结算报表字段定稿后接入。
 
-## 保留期限
+## 字段说明
 
-本仓库仅在测试窗口内存在，验证完成后即行归档或删除。
+| 字段 | 说明 |
+|---|---|
+| `applicant_name` | 申请人姓名 |
+| `applicant_mobile` | 中间四位以 `****` 代替 |
+| `applicant_email` | 邮箱，用户名部分仅保留前三位 |
+| `id_doc_no` | 证件号，保留前 6 位与后 4 位形态 |
+| `settlement_account` | 结算账户，仅保留末四位 |
+| `kyc_status` | `APPROVED` / `PENDING` / `REJECTED` |
+| `trade_volume_usd` | 累计交易额，美元 |
 
-Maintainer: authorized internal security testing only.
+## 已知问题
+
+- `REJECTED` 的申请会保留 `trade_volume_usd=0`，统计通过率时需单独剔除。
+- 同一申请人在资料补交后会新增一行，按 `applicant_mobile` 去重取最新状态。
+
+## 维护
+
+商户准入组
