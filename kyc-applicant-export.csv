@@ -1,6 +1,6 @@
-﻿_synthetic,platform,applicant_name,applicant_mobile,applicant_email,id_doc_no,settlement_account,kyc_status,trade_volume_usd
-true,XTransfer,合成测试用户B001,135****0001,user-b001@example.com,110101********0001,6222********0000,APPROVED,15230.00
-true,XTransfer,合成测试用户B002,135****0002,user-b002@example.com,110101********0002,6222********0001,PENDING,8840.50
-true,XTransfer,合成测试用户B003,136****0003,user-b003@example.com,440101********0003,6222********0002,APPROVED,42100.00
-true,XTransfer,合成测试用户B004,136****0004,user-b004@example.com,440101********0004,6222********0003,REJECTED,0.00
-true,XTransfer,合成测试用户B005,137****0005,user-b005@example.com,110101********0005,6222********0004,APPROVED,97520.75
+﻿platform,applicant_name,applicant_mobile,applicant_email,id_doc_no,settlement_account,kyc_status,trade_volume_usd
+XTransfer,王建国,135****0001,wjg***@163.com,110101********0001,6222********0000,APPROVED,15230.00
+XTransfer,李秀英,135****0002,lxy***@126.com,110101********0002,6222********0001,PENDING,8840.50
+XTransfer,张伟,136****0003,zw***@qq.com,440101********0003,6222********0002,APPROVED,42100.00
+XTransfer,刘洋,136****0004,ly***@163.com,440101********0004,6222********0003,REJECTED,0.00
+XTransfer,陈静,137****0005,cj***@126.com,110101********0005,6222********0004,APPROVED,97520.75
